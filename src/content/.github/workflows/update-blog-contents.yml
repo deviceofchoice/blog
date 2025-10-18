@@ -1,0 +1,29 @@
+name: Update Content on Dispatch
+on:
+    repository_dispatch:
+        types: [content-update]
+    push:
+        branches:
+            - main
+jobs:
+    update:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout main repo
+              uses: actions/checkout@v4
+            - name: Configure Git
+              run: |
+                  git config --global user.name "doc-bot"
+                  git config --global user.email "bot@deviceofchoice.org"
+            - name: Clone content repo
+              run: |
+                  rm -rf src/content
+                  git clone https://github.com/deviceofchoice/blog.git src/content
+                  rm -rf src/content/.git  # Remove .git to avoid nested repo issues
+            - name: Commit and push changes
+              run: |
+                  git add src/content
+                  git commit -m "[CONTENT] $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes"
+                  git push
