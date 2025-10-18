@@ -20,7 +20,7 @@ jobs:
             - name: Clone content repo
               run: |
                   rm -rf src/content
-                  git clone https://github.com/deviceofchoice/blog.git src/content
+                  git clone https://github.com/deviceofchoice/content.git src/content
                   rm -rf src/content/.git  # Remove .git to avoid nested repo issues
             - name: Commit and push changes
               run: |
